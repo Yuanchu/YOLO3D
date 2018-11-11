@@ -12,7 +12,7 @@ from region_loss import RegionLoss
 batch_size=12
 
 # dataset
-dataset=KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/Complex-Yolo/data',set='train')
+dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
 data_loader = data.DataLoader(dataset, batch_size, shuffle=True, pin_memory=False)
 
 model = ComplexYOLO()
