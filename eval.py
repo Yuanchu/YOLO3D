@@ -60,7 +60,7 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     pred_boxes[1] = y.data.view(nB*nA*nH*nW) + grid_y
     pred_boxes[2] = torch.exp(w.data).view(nB*nA*nH*nW) * anchor_w
     pred_boxes[3] = torch.exp(l.data).view(nB*nA*nH*nW) * anchor_l
-    #pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW)
+    ##pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW)
     pred_boxes[4] = im.data.view(nB*nA*nH*nW)
     pred_boxes[5] = re.data.view(nB*nA*nH*nW)
     
