@@ -1,3 +1,7 @@
+'''
+Functions to load KITTI dataset.
+'''
+
 from __future__ import division
 import os
 import os.path
