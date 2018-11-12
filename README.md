@@ -28,8 +28,20 @@ dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/miles
 ## Training
 These three lines in kitti.py should be modified with respect to your own path:
 ```
-lidar_file = cur_dir + '/data/training/velodyne/'+test_i+'.bin'
-calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
-label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
+lidar_file = cur_dir + '/data/training/velodyne/'+train_i+'.bin'
+calib_file = cur_dir + '/data/training/calib/'+train_i+'.txt'
+label_file = cur_dir + '/data/training/label_2/'+train_i+'.txt'
 ```
 ## Testing
+In eval.py, there is a block that begins with the following:
+```
+for file_i in range(1):
+	test_i = str(file_i).zfill(6)
+  
+	cur_dir = os.getcwd()	
+
+	lidar_file = cur_dir + '/data/training/velodyne/'+test_i+'.bin'
+	calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
+	label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
+```
+You should change the number in range(1) to the number of files that you want to put in the test set.  For each test file, the model will make predictions and output a point cloud image, named WHAT IS THE NAME????????
