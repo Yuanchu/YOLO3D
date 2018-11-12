@@ -87,7 +87,7 @@ bc['minX'] = 0; bc['maxX'] = 80; bc['minY'] = -40; bc['maxY'] = 40
 bc['minZ'] =-2; bc['maxZ'] = 1.25
 
 
-for file_i in range(1):
+for file_i in range(10):
 	test_i = str(file_i).zfill(6)
 
 	import os
