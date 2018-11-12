@@ -30,11 +30,7 @@ These three lines in kitti.py should be modified with respect to your own path:
 ```
 def __init__(self, root = '/Users/yuanchu/',set='train',type='velodyne_train'):
 ```
-You should also have a train.txt that contains filename for the images that you want in the training set.
-For example, if you want image 0001 and 0002 to be in the training set, then train.txt should contain:
-0001
-
-0002
+You should also have a train.txt that contains filename for the images that you want in the training set.  Each line corresponds to one image.  See the sample file in this repo.
 
 ## Testing
 In eval.py, there is a block that begins with the following:
