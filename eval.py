@@ -1,3 +1,9 @@
+'''
+Evaluate the model by creating and drawing predictions.
+Point clouds with predicted bounding boxes are drawn in 'eval_bv'+test_i+'.png'.
+'''
+import os
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -9,17 +15,13 @@ import time
 import cv2
 from scipy import misc
 
-
 from utils import *
-
 
 def drawRect(img,pt1,pt2,pt3,pt4,color,lineWidth):
     cv2.line(img, pt1, pt2, color, lineWidth)
     cv2.line(img, pt2, pt3, color, lineWidth)
     cv2.line(img, pt3, pt4, color, lineWidth)
     cv2.line(img, pt1, pt4, color, lineWidth)
-
-
 
 def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, only_objectness=1, validation=False):
     anchor_step = int(len(anchors)/num_anchors)
@@ -37,7 +39,7 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     nW = output.data.size(3)  # nW  32
     anchor_step = int(len(anchors)/num_anchors)
     
-    output   = output.view(nB, nA, (7+nC), nH, nW)
+    output = output.view(nB, nA, (7+nC), nH, nW)
     x = torch.sigmoid(output.index_select(2, Variable(torch.LongTensor([0]))).view(nB, nA, nH, nW))
     y = torch.sigmoid(output.index_select(2, Variable(torch.LongTensor([1]))).view(nB, nA, nH, nW))
     w = output.index_select(2, Variable(torch.LongTensor([2]))).view(nB, nA, nH, nW)
@@ -75,37 +77,26 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
             #print(pred_boxes[i])
     return all_boxes
 
-
-
-
 # classes
 #class_list = ['Car', 'Van' , 'Truck' , 'Pedestrian' , 'Person_sitting' , 'Cyclist' , 'Tram' ]
 
-
+# boundaries
 bc={}
 bc['minX'] = 0; bc['maxX'] = 80; bc['minY'] = -40; bc['maxY'] = 40
 bc['minZ'] =-2; bc['maxZ'] = 1.25
 
-
-for file_i in range(10):
+# change number in range to change how many files to test for
+# for each test file, 
+for file_i in range(1):
 	test_i = str(file_i).zfill(6)
-
-	import os
-	# import pdb; pdb.set_trace()
-	
 	cur_dir = os.getcwd()	
- 
 	lidar_file = cur_dir + '/data/training/velodyne/'+test_i+'.bin'
 	calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
 	label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
 	
-	# import pdb; pdb.set_trace()
-	
 	# load target data
 	calib = load_kitti_calib(calib_file)  
 	target = get_target(label_file,calib['Tr_velo2cam'])
-	#print(target)
-
 
 	# load point cloud data
 	a = np.fromfile(lidar_file, dtype=np.float32).reshape(-1, 4)
@@ -119,9 +110,6 @@ for file_i in range(10):
 	input = input.reshape(1,3,512,1024)
 	model = torch.load('ComplexYOLO_epoch110')
 	output = model(input.float())    #torch.Size([1, 75, 16, 32])
-
-
-
 
 	# eval result
 	conf_thresh   = 0.5
@@ -161,15 +149,9 @@ for file_i in range(10):
 	    rect_bottom2 = int(img_x+img_height/2)
 	    cv2.rectangle(img, (rect_top1,rect_top2), (rect_bottom1,rect_bottom2), (0,0,255), 1)
 	    
-
-	pt1=(100,100)
-	pt2=(150,50)
-	pt3=(175,75)
-	pt4=(125,125)
-	#drawRect(img,pt1,pt2,pt3,pt4,(0,0,255),2)
-
 	misc.imsave('eval_bv'+test_i+'.png',img)
 
+	# for interactive displays
 	#cv2.namedWindow('showimage')
 	#cv2.imshow("showimage",img)
 	#cv2.waitKey(0)

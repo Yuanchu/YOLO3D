@@ -1,5 +1,5 @@
 '''
-Define CNN layers; see paper for more details.
+    Define CNN layers; see paper for more details.
 '''
 
 import torch.nn as nn

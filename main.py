@@ -1,3 +1,7 @@
+'''
+    Main program for running the model.
+'''
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -35,8 +39,6 @@ for epoch in range(200):
            group['lr'] = 1e-5
        if(epoch>=160):
            group['lr'] = 1e-6
-
-
 
    for batch_idx, (rgb_map, target) in enumerate(data_loader):
           optimizer.zero_grad()

@@ -1,6 +1,6 @@
 '''
-Utilities for pre- and post-processing the data.  
-Inspired by https://github.com/marvis/pytorch-yolo2/blob/master/utils.py
+    Utilities for pre- and post-processing the data.  
+    Inspired by https://github.com/marvis/pytorch-yolo2/blob/master/utils.py
 '''
 
 import torch
