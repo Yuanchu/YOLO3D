@@ -1,3 +1,7 @@
+'''
+Define CNN layers; see paper for more details.
+'''
+
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
