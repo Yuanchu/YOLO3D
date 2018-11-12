@@ -22,12 +22,14 @@ MB)](http://www.cvlibs.net/download.php?file=data_object_calib.zip): Used for ca
 * [Training labels of object data set (5 MB)](http://www.cvlibs.net/download.php?file=data_object_label_2.zip).
 
 You should then set the dataset path by modifying the following line from main.py:
-~~~~dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')~~~~
-
+```
+dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
+```
 ## Training
-These three lines in 
+These three lines in kitti.py should be modified with respect to your own path:
+```
 lidar_file = cur_dir + '/data/training/velodyne/'+test_i+'.bin'
 calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
 label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
-
+```
 ## Testing
