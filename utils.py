@@ -1,3 +1,8 @@
+'''
+Utilities for pre- and post-processing the data.  
+Inspired by https://github.com/marvis/pytorch-yolo2/blob/master/utils.py
+'''
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
