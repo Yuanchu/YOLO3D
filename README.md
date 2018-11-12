@@ -44,7 +44,9 @@ for file_i in range(1):
 	calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
 	label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
 ```
-You should change the number in range(1) to the number of files that you want to put in the test set.  For each test file, the model will make predictions and output a point cloud image, saved using
+You should change the number in range(1) to the number of files that you want to put in the test set.  
+
+For each test file, the model will make predictions and output a point cloud image, saved using
 ```
 misc.imsave('eval_bv'+test_i+'.png',img)
 ```
