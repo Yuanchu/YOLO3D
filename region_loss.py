@@ -11,23 +11,23 @@ from utils import *
 
 
 def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW, noobject_scale, object_scale, sil_thresh):
-	'''
-		Get targets to be in the same format as predictions,
-		and at the same time calculate number correct nCorrect,
-		where nCorrect is prediction boxes where IoU > 0.5
-	'''
-	# number of batch
+    '''
+        Get targets to be in the same format as predictions,
+        and at the same time calculate number correct nCorrect,
+        where nCorrect is prediction boxes where IoU > 0.5
+    '''
+    # number of batch
     nB = target.size(0)
     # number of boxes
-	nTrueBox = target.data.size(1)
+    nTrueBox = target.data.size(1)
     # number of anchors (5)
-	nA = num_anchors   
-	# number of classes (8)
+    nA = num_anchors   
+    # number of classes (8)
     nC = num_classes 
     
-	# initialize variables, where noobject_scale is
-	# lambda scaling factor, as detailed in paper
-	anchor_step = len(anchors)/num_anchors
+    # initialize variables, where noobject_scale is
+    # lambda scaling factor, as detailed in paper
+    anchor_step = len(anchors)/num_anchors
     conf_mask  = torch.ones(nB, nA, nH, nW) * noobject_scale
     coord_mask = torch.zeros(nB, nA, nH, nW)
     cls_mask   = torch.zeros(nB, nA, nH, nW)
@@ -40,43 +40,43 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
     tconf      = torch.zeros(nB, nA, nH, nW)
     tcls       = torch.zeros(nB, nA, nH, nW) 
 
-	
-	# number of anchor pixels summed over all instances
+    
+    # number of anchor pixels summed over all instances
     nAnchors = nA*nH*nW
-	# number of pixels
+    # number of pixels
     nPixels  = nH*nW
-	
-	# process pred boxes
+    
+    # process pred boxes
     for b in range(nB):
-		# get current pred box
+        # get current pred box
         cur_pred_boxes = pred_boxes[b*nAnchors:(b+1)*nAnchors].t()
         # store IoU
-		cur_ious = torch.zeros(nAnchors)
+        cur_ious = torch.zeros(nAnchors)
         for t in range(nTrueBox):
             if target[b][t][1] == 0:
                 break
             # nW = 32, nH = 16
-			gx = target[b][t][1]*nW
+            gx = target[b][t][1]*nW
             gy = target[b][t][2]*nH
             gw = target[b][t][3]*nW
             gl = target[b][t][4]*nH
             gim= target[b][t][5]
             gre= target[b][t][6]
-			
-			# ground truth box
+            
+            # ground truth box
             cur_gt_boxes = torch.FloatTensor([gx,gy,gw,gl]).repeat(nAnchors,1).t()
             cur_ious = torch.max(cur_ious, bbox_ious(cur_pred_boxes, cur_gt_boxes, x1y1x2y2=False))
         conf_mask = conf_mask.view(nB, nAnchors)
         conf_mask[b][cur_ious>sil_thresh] = 0
 
-	# number of ground truth
+    # number of ground truth
     nGT = 0
-	# number correct (those with IoU > 0.5)
+    # number correct (those with IoU > 0.5)
     nCorrect = 0
-	
-	# construct target to be same format as we construct predictions
+    
+    # construct target to be same format as we construct predictions
     # and calculate IoUs.  See forward() below.
-	for b in range(nB):
+    for b in range(nB):
         for t in range(nTrueBox):
             if target[b][t][1] == 0:
                 break
@@ -130,8 +130,8 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             tconf[b][best_n][gj][gi] = iou
             tcls[b][best_n][gj][gi] = target[b][t][0]
             
-			# Set IoU threshold to 0.5.
-			if iou > 0.5:
+            # Set IoU threshold to 0.5.
+            if iou > 0.5:
                 nCorrect = nCorrect + 1
 
     conf_mask = conf_mask.view(nB, nA, nH, nW)
@@ -141,14 +141,14 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
 
 
 class RegionLoss(nn.Module):
-	'''
-		Construct E-RPN and compute losses
-	'''
+    '''
+        Construct E-RPN and compute losses
+    '''
     def __init__(self, num_classes=8, num_anchors=5):
         '''
-			Constructor; set values
-		'''
-		super(RegionLoss, self).__init__()
+            Constructor; set values
+        '''
+        super(RegionLoss, self).__init__()
         self.num_classes = num_classes
         self.anchors = anchors
         self.num_anchors = num_anchors
@@ -160,13 +160,13 @@ class RegionLoss(nn.Module):
         self.thresh = 0.6
 
     def forward(self, output, target):
-		'''
-			One forward pass. 
-			Included in the comments are sample tensor shapes.
-		'''
+        '''
+            One forward pass. 
+            Included in the comments are sample tensor shapes.
+        '''
         #output : batch * channel *(6+1+num_classes)*H*W
-		#output: (1,75,16,32)
-		
+        #output: (1,75,16,32)
+        
         t0 = time.time()
         nB = output.data.size(0)  # 1
         nA = self.num_anchors     # num_anchors = 5
@@ -174,14 +174,14 @@ class RegionLoss(nn.Module):
         nH = output.data.size(2)  # nH  16
         nW = output.data.size(3)  # nW  32
 
-		# (1,5,15,16,32)
-		# 15 = 6*t + p_0 + p_n, where the 6 t's describe the box
-		# and the rest p_i are for each class
-		# The order of the t's are: x, y, w, l, im, re
+        # (1,5,15,16,32)
+        # 15 = 6*t + p_0 + p_n, where the 6 t's describe the box
+        # and the rest p_i are for each class
+        # The order of the t's are: x, y, w, l, im, re
         output = output.view(nB, nA, (7+nC), nH, nW)
-		
-		# choose ith element along 2nd dimension
-		# result shape for each: (1,5,16,32)
+        
+        # choose ith element along 2nd dimension
+        # result shape for each: (1,5,16,32)
         x = torch.sigmoid(output.index_select(2, Variable(torch.LongTensor([0]))).view(nB, nA, nH, nW))
         y = torch.sigmoid(output.index_select(2, Variable(torch.LongTensor([1]))).view(nB, nA, nH, nW))
         w = output.index_select(2, Variable(torch.LongTensor([2]))).view(nB, nA, nH, nW)
@@ -189,77 +189,77 @@ class RegionLoss(nn.Module):
         im= output.index_select(2, Variable(torch.LongTensor([4]))).view(nB, nA, nH, nW)
         re= output.index_select(2, Variable(torch.LongTensor([5]))).view(nB, nA, nH, nW)
         
-		# p0, don't care
-		# (1,5,16,32)
-		conf = torch.sigmoid(output.index_select(2, Variable(torch.LongTensor([6]))).view(nB, nA, nH, nW))
+        # p0, don't care
+        # (1,5,16,32)
+        conf = torch.sigmoid(output.index_select(2, Variable(torch.LongTensor([6]))).view(nB, nA, nH, nW))
         
-		# (1,5,8,16,32), wehre 8 is number of classes
-		cls = output.index_select(2, Variable(torch.linspace(7,7+nC-1,nC).long()))
+        # (1,5,8,16,32), wehre 8 is number of classes
+        cls = output.index_select(2, Variable(torch.linspace(7,7+nC-1,nC).long()))
         
-		# (2560, 8) condense into one vector per class
-		cls = cls.view(nB*nA, nC, nH*nW).transpose(1,2).contiguous().view(nB*nA*nH*nW, nC)
+        # (2560, 8) condense into one vector per class
+        cls = cls.view(nB*nA, nC, nH*nW).transpose(1,2).contiguous().view(nB*nA*nH*nW, nC)
         t1 = time.time()
 
-		# (6, 2560)
+        # (6, 2560)
         pred_boxes = torch.FloatTensor(6, nB*nA*nH*nW)
         
-		# (2560)
-		# Represents x-coord of points
-		# [0,1,...,31]
-		# ...
-		# [0,1,...,31]
-		grid_x = torch.linspace(0, nW-1, nW).repeat(nH,1).repeat(nB*nA, 1, 1).view(nB*nA*nH*nW)
+        # (2560)
+        # Represents x-coord of points
+        # [0,1,...,31]
+        # ...
+        # [0,1,...,31]
+        grid_x = torch.linspace(0, nW-1, nW).repeat(nH,1).repeat(nB*nA, 1, 1).view(nB*nA*nH*nW)
         
-		# (2560)
-		# Represents y-coord of points
-		# [0,0,...,0]
-		# ...
-		# [15,15,...,15]
-		grid_y = torch.linspace(0, nH-1, nH).repeat(nW,1).t().repeat(nB*nA, 1, 1).view(nB*nA*nH*nW)
+        # (2560)
+        # Represents y-coord of points
+        # [0,0,...,0]
+        # ...
+        # [15,15,...,15]
+        grid_y = torch.linspace(0, nH-1, nH).repeat(nW,1).t().repeat(nB*nA, 1, 1).view(nB*nA*nH*nW)
         
-		# (5,1)
-		# each anchor's w and l
-		anchor_w = torch.Tensor(anchors).view(nA, self.anchor_step).index_select(1, torch.LongTensor([0]))
+        # (5,1)
+        # each anchor's w and l
+        anchor_w = torch.Tensor(anchors).view(nA, self.anchor_step).index_select(1, torch.LongTensor([0]))
         anchor_l = torch.Tensor(anchors).view(nA, self.anchor_step).index_select(1, torch.LongTensor([1]))
         
-		# (2560) = 1*5*16*32, flatten
-		anchor_w = anchor_w.repeat(nB, 1).repeat(1, 1, nH*nW).view(nB*nA*nH*nW)
+        # (2560) = 1*5*16*32, flatten
+        anchor_w = anchor_w.repeat(nB, 1).repeat(1, 1, nH*nW).view(nB*nA*nH*nW)
         anchor_l = anchor_l.repeat(nB, 1).repeat(1, 1, nH*nW).view(nB*nA*nH*nW)
 
-		# (2560) each
-		# E-RPN equation (4) from paper
-		# absolute x-coord of box
+        # (2560) each
+        # E-RPN equation (4) from paper
+        # absolute x-coord of box
         pred_boxes[0] = x.data.view(nB*nA*nH*nW) + grid_x
         # absolute y-coord of box
-		pred_boxes[1] = y.data.view(nB*nA*nH*nW) + grid_y
+        pred_boxes[1] = y.data.view(nB*nA*nH*nW) + grid_y
         
-		# adjust anchor w and l
-		pred_boxes[2] = torch.exp(w.data).view(nB*nA*nH*nW) * anchor_w
+        # adjust anchor w and l
+        pred_boxes[2] = torch.exp(w.data).view(nB*nA*nH*nW) * anchor_w
         pred_boxes[3] = torch.exp(l.data).view(nB*nA*nH*nW) * anchor_l
 
-		# t_im, t_re
+        # t_im, t_re
         pred_boxes[4] = im.data.view(nB*nA*nH*nW)
         pred_boxes[5] = re.data.view(nB*nA*nH*nW)
         
-		# should carry at least as much information when using just im,re without arctan
-		#pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW)
+        # should carry at least as much information when using just im,re without arctan
+        #pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW)
 
-		# (6,2560)
+        # (6,2560)
         pred_boxes = convert2cpu(pred_boxes.transpose(0,1).contiguous().view(-1,6))
         t2 = time.time()
 
-		# nGT: 3, nCorrect: 0, coord_mask: (1,5,16,32), cls_mask: (1,5,16,32)
-		# tx,ty,tw,tl,tim,tre,tconf,tcls: (1,5,16,32)
+        # nGT: 3, nCorrect: 0, coord_mask: (1,5,16,32), cls_mask: (1,5,16,32)
+        # tx,ty,tw,tl,tim,tre,tconf,tcls: (1,5,16,32)
         nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, tl, tim, tre, tconf,tcls = build_targets(pred_boxes, target.data, self.anchors, nA, nC, \
                                                                nH, nW, self.noobject_scale, self.object_scale, self.thresh)
         
-		# (1,5,16,32)
-		cls_mask = (cls_mask == 1)
+        # (1,5,16,32)
+        cls_mask = (cls_mask == 1)
         
-		# 2560
-		nProposals = int(torch.sum(torch.gt(conf,0.25)))
+        # 2560
+        nProposals = int(torch.sum(torch.gt(conf,0.25)))
 
-		# Convert into Variables
+        # Convert into Variables
         tx    = Variable(tx)
         ty    = Variable(ty)
         tw    = Variable(tw)
@@ -267,23 +267,23 @@ class RegionLoss(nn.Module):
         tim   = Variable(tim)
         tre   = Variable(tre)
         tconf = Variable(tconf)
-		
-		# 2560
+        
+        # 2560
         cls_mask = cls_mask.view(nB*nA*nH*nW)
         
-		# [0,0,0] three zeros because tcls_mask has 3 ones
-		tcls  = Variable(tcls.view(-1)[cls_mask].long())
+        # [0,0,0] three zeros because tcls_mask has 3 ones
+        tcls  = Variable(tcls.view(-1)[cls_mask].long())
 
         coord_mask = Variable(coord_mask)
         conf_mask  = Variable(conf_mask)
-		
-		# (2560,8)
+        
+        # (2560,8)
         cls_mask   = Variable(cls_mask.view(-1, 1).repeat(1,nC))
         # (3,8)
-		cls        = cls[cls_mask].view(-1, nC)
+        cls        = cls[cls_mask].view(-1, nC)
         t3 = time.time()
 
-		# calculate losses as detailed in paper
+        # calculate losses as detailed in paper
         loss_x = self.coord_scale * nn.MSELoss(reduction='sum')(x*coord_mask, tx*coord_mask)
         loss_y = self.coord_scale * nn.MSELoss(reduction='sum')(y*coord_mask, ty*coord_mask)
         loss_w = self.coord_scale * nn.MSELoss(reduction='sum')(w*coord_mask, tw*coord_mask)
