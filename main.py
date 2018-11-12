@@ -43,9 +43,6 @@ for epoch in range(200):
 
           rgb_map = rgb_map.view(rgb_map.data.size(0),rgb_map.data.size(3),rgb_map.data.size(1),rgb_map.data.size(2))
           output = model(rgb_map.float())
-
-          # import pdb; pdb.set_trace()
-	 
           loss = region_loss(output,target)
           loss.backward()
           optimizer.step()

@@ -127,7 +127,6 @@ class RegionLoss(nn.Module):
 
     def forward(self, output, target):
         #output : BxAs*(6+1+num_classes)*H*W
-        import pdb; pdb.set_trace()
         t0 = time.time()
         nB = output.data.size(0)
         nA = self.num_anchors     # num_anchors = 5
@@ -206,5 +205,4 @@ class RegionLoss(nn.Module):
             print('       create loss : %f' % (t4 - t3))
             print('             total : %f' % (t4 - t0))
         print('nGT %d, recall %d, proposals %d, loss: x %f, y %f, w %f, h %f, conf %f, cls %f, Euler %f, total %f' % (nGT, nCorrect, nProposals, loss_x.data, loss_y.data, loss_w.data, loss_l.data, loss_conf.data, loss_cls.data,loss_Euler.data ,loss.data))
-        import pdb; pdb.set_trace()
         return loss
