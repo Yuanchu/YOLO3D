@@ -1,7 +1,3 @@
-'''
-    Functions to load KITTI dataset.
-'''
-
 from __future__ import division
 import os
 import os.path
@@ -10,14 +6,11 @@ import numpy as np
 import cv2
 import math
 
-
 from utils import *
-
-
 
 class KittiDataset(torch.utils.data.Dataset):
 
-    def __init__(self, root = '/Users/yuanchu/',set='train',type='velodyne_train'):
+    def __init__(self, root = '/home/yd2466/', set = 'train', type = 'velodyne_train'):
         self.type = type
         self.root = root
         self.data_path = os.path.join(root, 'training')
@@ -35,7 +28,6 @@ class KittiDataset(torch.utils.data.Dataset):
         calib_file = self.calib_path + '/' + self.file_list[i] + '.txt'
         label_file = self.label_path + '/' + self.file_list[i] + '.txt'
         image_file = self.image_path + '/' + self.file_list[i] + '.png'
-        #print(self.file_list[i])
 
         if self.type == 'velodyne_train':
 
@@ -43,10 +35,7 @@ class KittiDataset(torch.utils.data.Dataset):
 
             
             target = get_target(label_file,calib['Tr_velo2cam'])
-            #print(target)
-            #print(self.file_list[i])
             
-            ################################
             # load point cloud data
             a = np.fromfile(lidar_file, dtype=np.float32).reshape(-1, 4)
 
@@ -61,7 +50,6 @@ class KittiDataset(torch.utils.data.Dataset):
 
         else:
             raise ValueError('the type invalid')
-
 
     def __len__(self):
         return len(self.file_list)

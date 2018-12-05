@@ -80,7 +80,7 @@ bc['minX'] = 0; bc['maxX'] = 80; bc['minY'] = -40; bc['maxY'] = 40
 bc['minZ'] =-2; bc['maxZ'] = 1.25
 
 
-for file_i in [89]:
+for file_i in [21]:
 	print("Predicting image = %d" % file_i)
 	test_i = str(file_i).zfill(6)
 
@@ -102,15 +102,15 @@ for file_i in [89]:
 	# load trained model  and  forward
 	input = torch.from_numpy(rgb_map)       # (512, 1024, 3)
 	input = input.reshape(1, 3, 512, 1024)
-	model = torch.load('model/ComplexYOLO_epoch250')
+	model = torch.load('model/ComplexYOLO_epoch400')
 	model.cuda()
 	
 	# Set model.training to true so that batch normalization and dropout are engaged
-	# model.train()
-	model.eval()
+	model.train()
+	# model.eval()
 
 	# Predict multiple times for each image
-	num_predict = 1
+	num_predict = 1000
 	
 	img = cv2.imread('eval_bv.png')
 
@@ -132,6 +132,7 @@ for file_i in [89]:
 	    box = [rect_top2, rect_bottom2, rect_top1, rect_bottom1]
 	    true_boxes.append(box)
 
+	all_predicts = []
 	for k in range(num_predict):
 		output = model(input.float().cuda())    #torch.Size([1, 75, 16, 32])
 
@@ -143,10 +144,7 @@ for file_i in [89]:
 
 		all_boxes = get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors)
 		
-		# port pdb; pdb.set_trace()
-
 		for i in range(len(all_boxes)):
-		    import pdb; pdb.set_trace()	
 		    print("Box predicted!") 
 		    pred_img_y = int(all_boxes[i][0]*1024.0 / 32.0)   # 32 cell = 1024 pixels   
 		    pred_img_x = int(all_boxes[i][1]*512.0 / 16.0)    # 16 cell = 512 pixels 
@@ -159,21 +157,15 @@ for file_i in [89]:
 		    rect_bottom1 = int(pred_img_y+pred_img_width/2)
 		    rect_bottom2 = int(pred_img_x+pred_img_height/2)
 		    cv2.rectangle(img, (rect_top1,rect_top2), (rect_bottom1,rect_bottom2), (255,0,0), 1)
-		    
-		    box = [rect_top2, rect_bottom2, rect_top1, rect_bottom1]
+
+		    box = [rect_top1, rect_top2, rect_bottom1, rect_bottom2]
+		    all_predicts.append(box)
 	    
 	pt1=(100, 100)
 	pt2=(150, 50)
 	pt3=(175, 75)
 	pt4=(125, 125)
-	#drawRect(img,pt1,pt2,pt3,pt4,(0,0,255),2)
 
 	misc.imsave('predict/eval_bv' + test_i + '.png', img)
 
-	#cv2.namedWindow('showimage')
-	#cv2.imshow("showimage",img)
-	#cv2.waitKey(0)
-
-
-
-
+import pdb; pdb.set_trace()
