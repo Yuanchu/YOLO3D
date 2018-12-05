@@ -161,19 +161,5 @@ for file_i in [89]:
 		    cv2.rectangle(img, (rect_top1,rect_top2), (rect_bottom1,rect_bottom2), (255,0,0), 1)
 		    
 		    box = [rect_top2, rect_bottom2, rect_top1, rect_bottom1]
-	    
-	pt1=(100, 100)
-	pt2=(150, 50)
-	pt3=(175, 75)
-	pt4=(125, 125)
-	#drawRect(img,pt1,pt2,pt3,pt4,(0,0,255),2)
 
 	misc.imsave('predict/eval_bv' + test_i + '.png', img)
-
-	#cv2.namedWindow('showimage')
-	#cv2.imshow("showimage",img)
-	#cv2.waitKey(0)
-
-
-
-

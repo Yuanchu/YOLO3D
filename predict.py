@@ -72,8 +72,6 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
             #print(pred_boxes[i])
     return all_boxes
 
-# classes
-#class_list = ['Car', 'Van' , 'Truck' , 'Pedestrian' , 'Person_sitting' , 'Cyclist' , 'Tram' ]
 
 bc={}
 bc['minX'] = 0; bc['maxX'] = 80; bc['minY'] = -40; bc['maxY'] = 40
@@ -161,11 +159,5 @@ for file_i in [21]:
 		    box = [rect_top1, rect_top2, rect_bottom1, rect_bottom2]
 		    all_predicts.append(box)
 	    
-	pt1=(100, 100)
-	pt2=(150, 50)
-	pt3=(175, 75)
-	pt4=(125, 125)
-
 	misc.imsave('predict/eval_bv' + test_i + '.png', img)
-
-import pdb; pdb.set_trace()
+	np.save("all_predicts_%" % str(file_i), all_predicts)
