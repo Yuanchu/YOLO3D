@@ -171,6 +171,5 @@ def calc_ap_infos(eval_range, iou_thresh, conf_thresh):
 
 if __name__ == "__main__":
 	cls_infos = calc_ap_infos(eval_range, iou_thresh, conf_thresh)
-	import pdb; pdb.set_trace()
 	ap_values = [average_precision_score([_[0] for _ in cls_infos[i]], [_[1] for _ in cls_infos[i]]) for i in range(8)]
 
