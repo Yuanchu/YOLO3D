@@ -1,3 +1,7 @@
+"""
+    Predict a single image multiple (1000) times and draw bounding boxes. 
+"""
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -57,7 +61,6 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     pred_boxes[1] = y.data.view(nB*nA*nH*nW).cuda() + grid_y
     pred_boxes[2] = torch.exp(w.data).view(nB*nA*nH*nW).cuda() * anchor_w
     pred_boxes[3] = torch.exp(l.data).view(nB*nA*nH*nW).cuda() * anchor_l
-    #pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW).cuda()
     pred_boxes[4] = im.data.view(nB*nA*nH*nW).cuda()
     pred_boxes[5] = re.data.view(nB*nA*nH*nW).cuda()
     
@@ -69,7 +72,6 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     for i in range(2560):
         if pred_boxes[i][6]>conf_thresh:
             all_boxes.append(pred_boxes[i])
-            #print(pred_boxes[i])
     return all_boxes
 
 
@@ -105,7 +107,6 @@ for file_i in [21]:
 	
 	# Set model.training to true so that batch normalization and dropout are engaged
 	model.train()
-	# model.eval()
 
 	# Predict multiple times for each image
 	num_predict = 1000
@@ -138,7 +139,6 @@ for file_i in [21]:
 		conf_thresh   = 0.5
 		num_classes = int(8)
 		num_anchors = int(5)
-		# g = cv2.imread('eval_bv.png')
 
 		all_boxes = get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors)
 		
