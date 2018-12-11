@@ -1,3 +1,7 @@
+"""
+    Entry point for the main training, on 6000 images, batch size of 12, and 1000 epochs. 
+"""
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
