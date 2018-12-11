@@ -3,6 +3,10 @@
 ### Wei Luo (wl2671), Yuanchu Dang (yd2466)
 This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
 Our code is inspired by [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
+Our contributions are as follows:
+1. Incorporated uncertainty into 3D object detection while preserving average precision.
+2. Projected predictions to 3D using homography.
+3. Attempted to improve models on overlapping predictions.
 
 ## Data
 You should download and unzip the following data:
@@ -50,3 +54,8 @@ For each test file, the model will make predictions and output a point cloud ima
 ```
 misc.imsave('eval_bv'+test_i+'.png',img)
 ```
+
+## Network Architecture
+ARCHITECTURE PICTURE HERE
+## Sample Results
+RESULTS HERE
