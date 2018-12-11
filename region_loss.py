@@ -1,3 +1,9 @@
+"""
+    Defines the objective function (loss function) for the model. 
+"""
+
+
+
 import time
 import torch
 import logging
