@@ -47,9 +47,7 @@ In eval.py, there is a block that begins with the following:
 ```
 for file_i in range(1):
 	test_i = str(file_i).zfill(6)
-  
 	cur_dir = os.getcwd()	
-
 	lidar_file = cur_dir + '/data/training/velodyne/'+test_i+'.bin'
 	calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
 	label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
