@@ -9,7 +9,7 @@ Our contributions are as follows:
 3. Attempted to improve models on overlapping predictions.
 
 ## Data
-You should download and unzip the following data:
+To run the model, you need to download and unzip the following data:
 
 * [Velodyne point clouds (29 GB)](http://www.cvlibs.net/download.php?file=data_object_velodyne.zip): Information about the
 surrounding for a single frame gathered by Velodyne
