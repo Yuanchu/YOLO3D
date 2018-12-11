@@ -38,15 +38,17 @@ model.cuda()
 # define optimizer
 optimizer = optim.SGD(model.parameters(), lr = 1e-5 ,momentum = 0.9 , weight_decay = 0.0005)
 
-# define loss function
+# define the number of epochs
 epochs = range(1000)
 
+# Define the loss function
 region_loss = RegionLoss(num_classes = 8, num_anchors = 5)
 loss_history = np.zeros((len(epochs), int(len(data_loader.dataset) / batch_size), 7))
 
 for epoch in epochs:
    logging.info('Running epoch = %d' % epoch)
 
+   # Learning rate varies with epoch
    for group in optimizer.param_groups:
        if(epoch >= 4 & epoch < 80):
            group['lr'] = 1e-4
