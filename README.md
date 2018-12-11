@@ -1,6 +1,6 @@
 # Complex YOLO with Uncertainty
 ## Deep Learning Project
-### Wei Luo (wl2671), Yuanchu Dang (yd2466)
+### Wei Luo (wl2671), Yuanchu Dang (yd2466), Neil Menghani (nlm2138)
 This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
 Our code is inspired by [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
 Our contributions are as follows:
@@ -29,6 +29,12 @@ You should then set the dataset path by modifying the following line from main.p
 ```
 dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
 ```
+The following is an visualization of a sample image and its corresponding velodyne point-cloud.
+![Sample Data](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/data.PNG)
+
+## Network Architecture
+![Our Network Architecture](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/architecture.PNG)
+
 ## Training
 These three lines in kitti.py should be modified with respect to your own path:
 ```
@@ -55,7 +61,8 @@ For each test file, the model will make predictions and output a point cloud ima
 misc.imsave('eval_bv'+test_i+'.png',img)
 ```
 
-## Network Architecture
-ARCHITECTURE PICTURE HERE
+## Generating Results
+The [heat folder](https://github.com/Yuanchu/YOLO3D/tree/master/heat) and [project folder](https://github.com/Yuanchu/YOLO3D/tree/master/project) contain code for generating heatmap and 3D projections, respectively.  The heatmap script loads a saved .npy file containing bounding box predictions, and a .png file for the corresponding road image.  Note that running the heatmap script requires an account on plotly.  After running the program, it will put the resulting image on plotly.  You should change the configurations inside the script accordingly.  For projection, the script loads in saved .npy files containing target and prediction boxes, as well as original road image and corresponding velodyne point-cloud with target and prediction boxes drawn.  It also needs predefined heights and fine-tuned homography anchor points to produce an accurate 3D projection.
+
 ## Sample Results
-RESULTS HERE
+![Our Sample Results](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/results.PNG)
