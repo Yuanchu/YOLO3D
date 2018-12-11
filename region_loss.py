@@ -207,8 +207,7 @@ class RegionLoss(nn.Module):
         loss_conf = nn.MSELoss(reduction='sum')(conf*conf_mask, tconf*conf_mask)
         loss_cls = self.class_scale * nn.CrossEntropyLoss(reduction='sum')(cls, tcls)
         
-        # loss = loss_x + loss_y + loss_w + loss_l + loss_conf + loss_cls + loss_Euler + torch.tensor(loss_iou).cuda()
-        loss = torch.tensor(loss_iou, requires_grad=True).cuda()
+        loss = loss_x + loss_y + loss_w + loss_l + loss_conf + loss_cls + loss_Euler + torch.tensor(loss_iou).cuda()
         loss_history[epoch, batch_idx, :] = [loss_x, loss_y, loss_w, loss_l, loss_conf, loss_cls, loss_Euler, loss_iou]
         
         t4 = time.time()
