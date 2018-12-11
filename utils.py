@@ -1,3 +1,8 @@
+"""
+    Util scripts for building features, fetching ground truths, computing IoU, etc. 
+"""
+
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
