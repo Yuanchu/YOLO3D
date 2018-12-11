@@ -62,7 +62,6 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     pred_boxes[1] = y.data.view(nB*nA*nH*nW).cuda() + grid_y
     pred_boxes[2] = torch.exp(w.data).view(nB*nA*nH*nW).cuda() * anchor_w
     pred_boxes[3] = torch.exp(l.data).view(nB*nA*nH*nW).cuda() * anchor_l
-    #pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW).cuda()
     pred_boxes[4] = im.data.view(nB*nA*nH*nW).cuda()
     pred_boxes[5] = re.data.view(nB*nA*nH*nW).cuda()
     
@@ -76,8 +75,6 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
             conf_boxes.append(all_boxes[i])
     return all_boxes, conf_boxes
 
-# classes
-#class_list = ['Car', 'Van' , 'Truck' , 'Pedestrian' , 'Person_sitting' , 'Cyclist' , 'Tram' ]
 
 def calc_ap_infos(eval_range, iou_thresh, conf_thresh):
 	
@@ -112,7 +109,6 @@ def calc_ap_infos(eval_range, iou_thresh, conf_thresh):
 		model.cuda()
 		
 		# Set model.training to true so that batch normalization and dropout are engaged
-		# model.train()
 		model.eval()
 
 		# Predict multiple times for each image
@@ -171,6 +167,7 @@ def calc_ap_infos(eval_range, iou_thresh, conf_thresh):
 			      conf_cls_idx = int(conf_boxes[i][7:].argmax())
 			      cls_infos[conf_cls_idx].append([correct, conf_boxes[i][6].item()])
 	return cls_infos
+
 
 if __name__ == "__main__":
 	cls_infos = calc_ap_infos(eval_range, iou_thresh, conf_thresh)
