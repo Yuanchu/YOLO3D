@@ -66,3 +66,9 @@ The [heat folder](https://github.com/Yuanchu/YOLO3D/tree/master/heat) and [proje
 
 ## Sample Results
 ![Our Sample Results](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/results.PNG)
+
+## Future Work
+For future work, we can train model directly on labeled 3D data to make direct predictions without having to use homography and be able to visualize uncertainty in 3D.  We can also attempt to take other models such as Fast-RCNN to 3D.  Yet another direction would to extend ![YOLO 4D](https://openreview.net/pdf?id=B1xWZic29m).
+
+## Acknowledgments
+We would like to thank Professor Iddo Drori and Chenqin for their constructive feedbacks throughout this project!
