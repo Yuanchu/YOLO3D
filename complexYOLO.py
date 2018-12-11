@@ -1,3 +1,8 @@
+"""
+    Specifies the architecture for the Complex YOLO model.
+"""
+
+
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
