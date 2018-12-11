@@ -30,10 +30,10 @@ You should then set the dataset path by modifying the following line from main.p
 dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
 ```
 The following is an visualization of a sample image and its corresponding velodyne point-cloud.
-![Sample Data](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/data.PNG)
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/data.PNG" width="800px">
 
 ## Network Architecture
-![Our Network Architecture](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/architecture.PNG)
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/architecture.PNG" height="400px">
 
 ## Training
 These three lines in kitti.py should be modified with respect to your own path:
@@ -65,10 +65,10 @@ misc.imsave('eval_bv'+test_i+'.png',img)
 The [heat folder](https://github.com/Yuanchu/YOLO3D/tree/master/heat) and [project folder](https://github.com/Yuanchu/YOLO3D/tree/master/project) contain code for generating heatmap and 3D projections, respectively.  The heatmap script loads a saved .npy file containing bounding box predictions, and a .png file for the corresponding road image.  Note that running the heatmap script requires an account on plotly.  After running the program, it will put the resulting image on plotly.  You should change the configurations inside the script accordingly.  For projection, the script loads in saved .npy files containing target and prediction boxes, as well as original road image and corresponding velodyne point-cloud with target and prediction boxes drawn.  It also needs predefined heights and fine-tuned homography anchor points to produce an accurate 3D projection.
 
 ## Sample Results
-![Our Sample Results](https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/results.PNG)
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/results.PNG" height="500px">
 
 ## Future Work
-For future work, we can train model directly on labeled 3D data to make direct predictions without having to use homography and be able to visualize uncertainty in 3D.  We can also attempt to take other models such as Fast-RCNN to 3D.  Yet another direction would to extend ![YOLO 4D](https://openreview.net/pdf?id=B1xWZic29m).
+For future work, we can train model directly on labeled 3D data to make direct predictions without having to use homography and be able to visualize uncertainty in 3D.  We can also attempt to take other models such as Fast-RCNN to 3D.  Yet another direction would to extend [YOLO 4D](https://openreview.net/pdf?id=B1xWZic29m).
 
 ## Acknowledgments
 We would like to thank Professor Iddo Drori and Chenqin for their constructive feedbacks throughout this project!
