@@ -1,3 +1,7 @@
+"""
+    Evaluate on a single image. 
+"""
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -57,7 +61,6 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     pred_boxes[1] = y.data.view(nB*nA*nH*nW).cuda() + grid_y
     pred_boxes[2] = torch.exp(w.data).view(nB*nA*nH*nW).cuda() * anchor_w
     pred_boxes[3] = torch.exp(l.data).view(nB*nA*nH*nW).cuda() * anchor_l
-    #pred_boxes[4] = np.arctan2(im,re).data.view(nB*nA*nH*nW).cuda()
     pred_boxes[4] = im.data.view(nB*nA*nH*nW).cuda()
     pred_boxes[5] = re.data.view(nB*nA*nH*nW).cuda()
     
@@ -69,16 +72,11 @@ def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, onl
     for i in range(2560):
         if pred_boxes[i][6]>conf_thresh:
             all_boxes.append(pred_boxes[i])
-            #print(pred_boxes[i])
     return all_boxes
-
-# classes
-#class_list = ['Car', 'Van' , 'Truck' , 'Pedestrian' , 'Person_sitting' , 'Cyclist' , 'Tram' ]
 
 bc={}
 bc['minX'] = 0; bc['maxX'] = 80; bc['minY'] = -40; bc['maxY'] = 40
 bc['minZ'] =-2; bc['maxZ'] = 1.25
-
 
 for file_i in [89]:
 	print("Predicting image = %d" % file_i)
