@@ -1,12 +1,12 @@
 # Complex YOLO with Uncertainty
 ## Deep Learning Project
-### Wei Luo (wl2671), Yuanchu Dang (yd2466), Neil Menghani (nlm2138)
-This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
-Our code is inspired by [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
-Our contributions are as follows:
-1. Incorporated uncertainty into 3D object detection while preserving average precision.
+### Yuanchu Dang (yd2466), Wei Luo (wl2671), Neil Menghani (nlm2138)
+Our repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
+Our code is inspired by and builds on existing implementations of Complex YOLO [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
+Our further contributions are as follows:
+1. Added dropout layers and incorporated uncertainty into 3D object detection while preserving average precision.
 2. Projected predictions to 3D using homography.
-3. Attempted to improve models on overlapping predictions.
+3. Attempted to add innovative loss terms to improve the model in cases when it predicts overlapping bounding boxes.
 
 ## Data
 To run the model, you need to download and unzip the following data:
@@ -40,7 +40,7 @@ These three lines in kitti.py should be modified with respect to your own path:
 ```
 def __init__(self, root = '/Users/yuanchu/',set='train',type='velodyne_train'):
 ```
-You should also have a train.txt that contains filename for the images that you want in the training set.  Each line corresponds to one image.  See the sample file in this repo.
+You need to also have a train.txt that contains filename for the images that you want in the training set.  Each line corresponds to one image.  See the sample file in this repo.
 
 ## Testing
 In eval.py, there is a block that begins with the following:
