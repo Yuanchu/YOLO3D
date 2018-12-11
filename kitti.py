@@ -1,3 +1,8 @@
+"""
+    Defines class to load the KITTI dataset. 
+"""
+
+
 from __future__ import division
 import os
 import os.path
