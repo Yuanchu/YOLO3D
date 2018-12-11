@@ -49,7 +49,6 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             cur_ious = torch.max(cur_ious, bbox_ious(cur_pred_boxes, cur_gt_boxes, x1y1x2y2=False))
         
         likely_boxes = torch.masked_select(cur_pred_boxes, (cur_ious > sil_thresh).byte().repeat(6, 1))
-        # import pdb; pdb.set_trace()
         if likely_boxes.size() != torch.Size([0]):
             likely_boxes = likely_boxes.view(6, -1)
             all_combo = itertools.product(likely_boxes.transpose(0, 1), likely_boxes.transpose(0, 1))
@@ -59,8 +58,6 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
 
         conf_mask = conf_mask.view(nB, nAnchors)
         conf_mask[b][cur_ious>sil_thresh] = 0
-    
-    # import pdb; pdb.set_trace()
 
     nGT = 0
     nCorrect = 0
