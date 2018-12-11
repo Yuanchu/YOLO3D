@@ -1,3 +1,8 @@
+"""
+    Generate train.txt file which contains a list of training indices.
+"""
+
+
 from os import listdir
 from os.path import isfile, join
 
