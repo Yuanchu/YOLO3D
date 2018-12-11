@@ -1,3 +1,8 @@
+"""
+    Make prediction on images and calculate average precision values. 
+"""
+
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -12,9 +17,8 @@ import os
 from utils import *
 from sklearn.metrics import average_precision_score
 
-eval_range = range(6000)
-# eval_range = range(6000, 7481)
-# eval_range = range(7000, 7481)
+eval_range = range(6000) # Training indices
+# eval_range = range(6000, 7481) # Testing indices
 iou_thresh = 0.5
 conf_thresh = 1e-3
 
