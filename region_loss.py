@@ -1,6 +1,7 @@
 import time
 import torch
 import logging
+import itertools
 import math
 import torch.nn as nn
 import torch.nn.functional as F
@@ -31,6 +32,7 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
 
     nAnchors = nA*nH*nW
     nPixels  = nH*nW
+    loss_iou = 0.0
     for b in range(nB):
         cur_pred_boxes = pred_boxes[b*nAnchors:(b+1)*nAnchors].t()
         cur_ious = torch.zeros(nAnchors)
@@ -45,9 +47,20 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             gre= target[b][t][6]
             cur_gt_boxes = torch.FloatTensor([gx,gy,gw,gl]).repeat(nAnchors,1).t()
             cur_ious = torch.max(cur_ious, bbox_ious(cur_pred_boxes, cur_gt_boxes, x1y1x2y2=False))
+        
+        likely_boxes = torch.masked_select(cur_pred_boxes, (cur_ious > sil_thresh).byte().repeat(6, 1))
+        # import pdb; pdb.set_trace()
+        if likely_boxes.size() != torch.Size([0]):
+            likely_boxes = likely_boxes.view(6, -1)
+            all_combo = itertools.product(likely_boxes.transpose(0, 1), likely_boxes.transpose(0, 1))
+            for combo in all_combo:
+                loss_iou += bbox_iou(combo[0], combo[1], x1y1x2y2 = False)
+            loss_iou -= float(likely_boxes.shape[1])
+
         conf_mask = conf_mask.view(nB, nAnchors)
         conf_mask[b][cur_ious>sil_thresh] = 0
-
+    
+    # import pdb; pdb.set_trace()
 
     nGT = 0
     nCorrect = 0
@@ -108,7 +121,7 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
                 nCorrect = nCorrect + 1
 
     conf_mask = conf_mask.view(nB, nA, nH, nW)
-    return nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, tl, tim, tre, tconf, tcls
+    return nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, tl, tim, tre, tconf, tcls, loss_iou
 
 
 
@@ -165,7 +178,7 @@ class RegionLoss(nn.Module):
         pred_boxes = convert2cpu(pred_boxes.transpose(0,1).contiguous().view(-1,6))
         t2 = time.time()
 
-        nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, tl, tim, tre, tconf,tcls = build_targets(pred_boxes, target.data, self.anchors, nA, nC, \
+        nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, tl, tim, tre, tconf,tcls, loss_iou = build_targets(pred_boxes, target.data, self.anchors, nA, nC, \
                                                                nH, nW, self.noobject_scale, self.object_scale, self.thresh)
         cls_mask = (cls_mask == 1)
         nProposals = int(torch.sum(torch.gt(conf,0.25)))
@@ -196,9 +209,10 @@ class RegionLoss(nn.Module):
         loss_Euler = loss_im + loss_re
         loss_conf = nn.MSELoss(reduction='sum')(conf*conf_mask, tconf*conf_mask)
         loss_cls = self.class_scale * nn.CrossEntropyLoss(reduction='sum')(cls, tcls)
-        loss = loss_x + loss_y + loss_w + loss_l + loss_conf + loss_cls + loss_Euler
-
-        loss_history[epoch, batch_idx, :] = [loss_x, loss_y, loss_w, loss_l, loss_conf, loss_cls, loss_Euler]
+        
+        # loss = loss_x + loss_y + loss_w + loss_l + loss_conf + loss_cls + loss_Euler + torch.tensor(loss_iou).cuda()
+        loss = torch.tensor(loss_iou, requires_grad=True).cuda()
+        loss_history[epoch, batch_idx, :] = [loss_x, loss_y, loss_w, loss_l, loss_conf, loss_cls, loss_Euler, loss_iou]
         
         t4 = time.time()
         if False:
