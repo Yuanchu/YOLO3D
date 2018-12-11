@@ -1,7 +1,7 @@
 # Complex YOLO with Uncertainty
 ## Deep Learning Project
 ### Wei Luo (wl2671), Yuanchu Dang (yd2466), Neil Menghani (nlm2138)
-This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
+This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  You may refer to our [report](https://github.com/Yuanchu/YOLO3D/blob/master/presentation/report.pdf) and [poster](https://github.com/Yuanchu/YOLO3D/blob/master/presentation/poster.pdf) for more details about theory.  Each file contains docstring that documents its functionality.
 Our code is inspired by [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
 Our contributions are as follows:
 1. Incorporated uncertainty into 3D object detection while preserving average precision.
@@ -9,7 +9,7 @@ Our contributions are as follows:
 3. Attempted to improve models on overlapping predictions.
 
 ## Data
-To run the model, you need to download and unzip the following data:
+You should download and unzip the following data:
 
 * [Velodyne point clouds (29 GB)](http://www.cvlibs.net/download.php?file=data_object_velodyne.zip): Information about the
 surrounding for a single frame gathered by Velodyne
