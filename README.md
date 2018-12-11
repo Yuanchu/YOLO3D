@@ -1,7 +1,7 @@
 # Complex YOLO with Uncertainty
 ## Deep Learning Project
 ### Wei Luo (wl2671), Yuanchu Dang (yd2466), Neil Menghani (nlm2138)
-This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  You may refer to our [report](https://github.com/Yuanchu/YOLO3D/blob/master/presentation/report.pdf) and [poster](https://github.com/Yuanchu/YOLO3D/blob/master/presentation/poster.pdf) for more details about theory.  Each file contains docstring that documents its functionality.
+This repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
 Our code is inspired by [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
 Our contributions are as follows:
 1. Incorporated uncertainty into 3D object detection while preserving average precision.
@@ -9,7 +9,7 @@ Our contributions are as follows:
 3. Attempted to improve models on overlapping predictions.
 
 ## Data
-You should download and unzip the following data:
+To run the model, you need to download and unzip the following data:
 
 * [Velodyne point clouds (29 GB)](http://www.cvlibs.net/download.php?file=data_object_velodyne.zip): Information about the
 surrounding for a single frame gathered by Velodyne
@@ -25,7 +25,7 @@ MB)](http://www.cvlibs.net/download.php?file=data_object_calib.zip): Used for ca
 
 * [Training labels of object data set (5 MB)](http://www.cvlibs.net/download.php?file=data_object_label_2.zip).
 
-You should then set the dataset path by modifying the following line from main.py:
+You also need to set the dataset path by modifying the following line from main.py:
 ```
 dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
 ```
@@ -76,7 +76,7 @@ Below is a comparison of average precision between original Complex YOLO and our
 You may refer to either our report or poster for more details.
 
 ## Future Work
-For future work, we can train model directly on labeled 3D data to make direct predictions without having to use homography and be able to visualize uncertainty in 3D.  We can also attempt to take other models such as Fast-RCNN to 3D.  Yet another direction would to extend [YOLO 4D](https://openreview.net/pdf?id=B1xWZic29m).
+For future work, we can train model directly on labeled 3D data to make direct predictions without having to use homography and be able to visualize uncertainty in 3D.  We can also attempt to take other models such as Fast-RCNN to 3D.  Yet another direction would to extend to 4D as just presented at NeurIPS 2018: [YOLO 4D](https://openreview.net/pdf?id=B1xWZic29m)!
 
 ## Acknowledgments
 We would like to thank Professor Iddo Drori and Chenqin for their constructive feedbacks throughout this project!
