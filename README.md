@@ -1,6 +1,6 @@
 # Complex YOLO with Uncertainty
 ## Deep Learning Project
-### Yuanchu Dang and Wei Luo
+### [Yuanchu Dang](https://www.linkedin.com/in/yuanchu-dang-6364a562/) and Wei Luo
 Our repo contains a PyTorch implementation of the [Complex YOLO](https://arxiv.org/pdf/1803.06199.pdf) model with uncertainty for object detection in 3D.  
 Our code is inspired by and builds on existing implementations of Complex YOLO [implementation of 2D YOLO](https://github.com/marvis/pytorch-yolo2) and [sample Complex YOLO implementation](https://github.com/AI-liu/Complex-YOLO).   
 Our further contributions are as follows:
