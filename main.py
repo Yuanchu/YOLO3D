@@ -43,7 +43,7 @@ epochs = range(1000)
 
 # Define the loss function
 region_loss = RegionLoss(num_classes = 8, num_anchors = 5)
-loss_history = np.zeros((len(epochs), int(len(data_loader.dataset) / batch_size), 7))
+loss_history = np.zeros((len(epochs), int(len(data_loader.dataset) / batch_size), 8))
 
 for epoch in epochs:
    logging.info('Running epoch = %d' % epoch)
