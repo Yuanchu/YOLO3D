@@ -30,10 +30,10 @@ You also need to set the dataset path by modifying the following line from main.
 dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
 ```
 The following is an visualization of a sample image and its corresponding velodyne point-cloud.
-<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/data.PNG" width="800px">
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/data.PNG" width="800px">
 
 ## Network Architecture
-<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/architecture.PNG" height="400px">
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/architecture.PNG" height="400px">
 
 ## Training
 These three lines in kitti.py should be modified with respect to your own path:
@@ -65,11 +65,11 @@ The [heat folder](https://github.com/Yuanchu/YOLO3D/tree/master/heat) and [proje
 ## Sample Results
 Below are sample velodyne point-cloud with box predictions, along with the corresponding heatmaps that show our model's confidence.
 
-<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/results.PNG" height="500px">
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/results.PNG" height="500px">
 
 Below is a comparison of average precision between original Complex YOLO and our Complex YOLO with uncertainty.
 
-<img src="https://github.com/Yuanchu/YOLO3D/blob/master/readme_imgs/result_table.PNG" width="500px">
+<img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/result_table.PNG" width="500px">
 
 You may refer to either our report or poster for more details.
 
