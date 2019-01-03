@@ -32,13 +32,19 @@ The following is an visualization of a sample image and its corresponding velody
 <img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/architecture.PNG" height="400px">
 
 ## Training
-You can kick off the training process by executing:
+First, you need to have a train.txt under data/training that contains 6-digit indices for the images that you want in the training set. Each line corresponds to one image. See the sample file in this repo. 
+
+A reasonable train.txt can be generate by running:
+```
+python generate_train_txt.py
+```
+This produces a train.txt that contains the first 6000 images. Toggle the optional arguments to set your desired size. 
+
+Next, you can kick off the training process by executing:
 ```
 python train.py
 ```
 There are also optional arguments that control batch size, logging, learning rate, momentum, weight decay and epochs. To figure out their usage, simply read the prompts in the parser and track their usage in the script. 
-
-You need to also have a train.txt that contains 6-digit indices for the images that you want in the training set. Each line corresponds to one image. See the sample file in this repo.
 
 ## Testing
 In eval.py, there is a block that begins with the following:
