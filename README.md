@@ -25,10 +25,6 @@ MB)](http://www.cvlibs.net/download.php?file=data_object_calib.zip): Used for ca
 
 * [Training labels of object data set (5 MB)](http://www.cvlibs.net/download.php?file=data_object_label_2.zip).
 
-You also need to set the dataset path by modifying the following line from main.py:
-```
-dataset = KittiDataset(root='/Users/yuanchu/columbia/deep_learning/project/milestone/YOLO3D/data',set='train')
-```
 The following is an visualization of a sample image and its corresponding velodyne point-cloud.
 <img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/data.PNG" width="800px">
 
@@ -36,11 +32,13 @@ The following is an visualization of a sample image and its corresponding velody
 <img src="https://github.com/Yuanchu/YOLO3D/blob/master/images/architecture.PNG" height="400px">
 
 ## Training
-These three lines in kitti.py should be modified with respect to your own path:
+You can kick off the training process by executing:
 ```
-def __init__(self, root = '/Users/yuanchu/',set='train',type='velodyne_train'):
+python train.py
 ```
-You need to also have a train.txt that contains filename for the images that you want in the training set.  Each line corresponds to one image.  See the sample file in this repo.
+There are also optional arguments that control batch size, logging, learning rate, momentum, weight decay and epochs. To figure out their usage, simply read the prompts in the parser and track their usage in the script. 
+
+You need to also have a train.txt that contains 6-digit indices for the images that you want in the training set. Each line corresponds to one image. See the sample file in this repo.
 
 ## Testing
 In eval.py, there is a block that begins with the following:
