@@ -16,7 +16,7 @@ from utils import *
 
 def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW, noobject_scale, object_scale, sil_thresh):
     
-    # nTrueBox: 50, nA: 5, nC: 8
+    # nTrueBox = 50, nA = 5, nC = 8
     nB = target.size(0)
     nTrueBox = target.data.size(1)
     nA = num_anchors
@@ -43,17 +43,19 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
         for t in range(nTrueBox):
             if target[b][t][1] == 0:
                 break
+
             # nW = 32, nH = 16
             gx = target[b][t][1] * nW
             gy = target[b][t][2] * nH
             gw = target[b][t][3] * nW
             gl = target[b][t][4] * nH
-            gim= target[b][t][5]
-            gre= target[b][t][6]
+            gim = target[b][t][5]
+            gre = target[b][t][6]
             cur_gt_boxes = torch.FloatTensor([gx, gy, gw, gl]).repeat(nAnchors, 1).t()
             cur_ious = torch.max(cur_ious, bbox_ious(cur_pred_boxes, cur_gt_boxes, x1y1x2y2 = False))
         
         likely_boxes = torch.masked_select(cur_pred_boxes, (cur_ious > sil_thresh).byte().repeat(6, 1))
+        
         if likely_boxes.size() != torch.Size([0]):
             likely_boxes = likely_boxes.view(6, -1)
             all_combo = itertools.product(likely_boxes.transpose(0, 1), likely_boxes.transpose(0, 1))
@@ -80,8 +82,8 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             gj = int(gy)
             gw = target[b][t][3] * nW
             gl = target[b][t][4] * nH
-            gim= target[b][t][5]
-            gre= target[b][t][6]
+            gim = target[b][t][5]
+            gre = target[b][t][6]
             gt_box = [0, 0, gw, gl]
             for n in range(nA):
                 aw = anchors[int(anchor_step * n)]
@@ -110,8 +112,8 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
             ty[b][best_n][gj][gi] = target[b][t][2] * nH - gj
             tw[b][best_n][gj][gi] = np.log(gw / anchors[int(anchor_step * best_n)])
             tl[b][best_n][gj][gi] = np.log(gl / anchors[int(anchor_step * best_n + 1)])
-            tim[b][best_n][gj][gi]= target[b][t][5]
-            tre[b][best_n][gj][gi]= target[b][t][6]
+            tim[b][best_n][gj][gi] = target[b][t][5]
+            tre[b][best_n][gj][gi] = target[b][t][6]
             iou = bbox_iou(gt_box, pred_box, x1y1x2y2 = False)
             tconf[b][best_n][gj][gi] = iou
             tcls[b][best_n][gj][gi] = target[b][t][0]
@@ -150,8 +152,8 @@ class RegionLoss(nn.Module):
         y = torch.sigmoid(output.index_select(2, Variable(torch.cuda.LongTensor([1]))).view(nB, nA, nH, nW))
         w = output.index_select(2, Variable(torch.cuda.LongTensor([2]))).view(nB, nA, nH, nW)
         l = output.index_select(2, Variable(torch.cuda.LongTensor([3]))).view(nB, nA, nH, nW)
-        im= output.index_select(2, Variable(torch.cuda.LongTensor([4]))).view(nB, nA, nH, nW)
-        re= output.index_select(2, Variable(torch.cuda.LongTensor([5]))).view(nB, nA, nH, nW)
+        im = output.index_select(2, Variable(torch.cuda.LongTensor([4]))).view(nB, nA, nH, nW)
+        re = output.index_select(2, Variable(torch.cuda.LongTensor([5]))).view(nB, nA, nH, nW)
         conf = torch.sigmoid(output.index_select(2, Variable(torch.cuda.LongTensor([6]))).view(nB, nA, nH, nW))
         cls = output.index_select(2, Variable(torch.linspace(7, 7 + nC - 1, nC).long().cuda()))
         cls = cls.view(nB*nA, nC, nH*nW).transpose(1, 2).contiguous().view(nB * nA * nH * nW, nC)
