@@ -46,21 +46,20 @@ python train.py
 ```
 There are also optional arguments that control batch size, logging, learning rate, momentum, weight decay and epochs. To figure out their usage, simply read the prompts in the parser and track their usage in the script. 
 
-## Testing
-In eval.py, there is a block that begins with the following:
+## Predicting
+To run predictions on images, use predict.py. Suppose the directory for your trained model is model/ComplexYOLO_epoch400, and you want to predict and draw bounding boxes on the first 100 images. Execute the following command:
 ```
-for file_i in range(1):
-	test_i = str(file_i).zfill(6)
-	cur_dir = os.getcwd()	
-	lidar_file = cur_dir + '/data/training/velodyne/'+test_i+'.bin'
-	calib_file = cur_dir + '/data/training/calib/'+test_i+'.txt'
-	label_file = cur_dir + '/data/training/label_2/'+test_i+'.txt'
+python predict.py 1 100 model/ComplexYOLO_epoch400
 ```
-You need to change the number in range(1) to the number of files that you want to put in the test set.  
+The first argument is the starting index of the image you want to predict, and the second argument is the ending index, both inclusive. 
 
-For each test file, the model will make predictions and output a point cloud image, saved using
+There are also two optional arguments:
+* --mode: "train" or "eval", case insensitive, with batch normalization and dropout layers actively engaged under the "train" mode. Default is set to "eval" mode. 
+* --num_predict: number of times to evaluate each image, only meaningful for the "train" mode with active dropout layers. Default is set to 1. 
+
+For example, if you wish to turn on batch normalization and the dropout layers, and evaluate, say image 21, 1000 times to get a sense of the uncertainty for the model prediction, you can do: 
 ```
-misc.imsave('eval_bv'+test_i+'.png',img)
+python3 predict.py 21 21 model/ComplexYOLO_epoch400 --mode train --num_predict 1000
 ```
 
 ## Generating Results
