@@ -13,7 +13,7 @@ import datetime
 import os
 import argparse
 
-from complexYOLO import ComplexYOLO
+from model import ComplexYOLO
 from kitti import KittiDataset
 from region_loss import RegionLoss
 
