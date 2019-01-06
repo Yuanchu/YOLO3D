@@ -14,8 +14,6 @@ except ImportError:
 
 
 class Logger(object):
-
-
     def __init__(self, log_dir):
         """Create a summary writer logging to log_dir."""
         self.writer = tf.summary.FileWriter(log_dir)
