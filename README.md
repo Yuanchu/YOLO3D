@@ -54,12 +54,12 @@ python predict.py 1 100 model/ComplexYOLO_epoch400
 The first argument is the starting index of the image you want to predict, and the second argument is the ending index, both inclusive. 
 
 There are also two optional arguments:
-* --mode: "train" or "eval", case insensitive, with batch normalization and dropout layers actively engaged under the "train" mode. Default is set to "eval" mode. 
+* --mode: "train" or "eval", case insensitive, with batch normalization and dropout layers actively engaged under the "train" mode. Default is set to the "eval" mode. 
 * --num_predict: number of times to evaluate each image, only meaningful for the "train" mode with active dropout layers. Default is set to 1. 
 
 For example, if you wish to turn on batch normalization and the dropout layers, and evaluate, say image 21, 1000 times to get a sense of the uncertainty for the model prediction, you can do: 
 ```
-python3 predict.py 21 21 model/ComplexYOLO_epoch400 --mode train --num_predict 1000
+python predict.py 21 21 model/ComplexYOLO_epoch400 --mode train --num_predict 1000
 ```
 
 ## Generating Results
