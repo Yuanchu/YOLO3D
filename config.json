@@ -1,6 +1,5 @@
 {
     "class_list": ["Car", "Van" , "Truck" , "Pedestrian" , "Person_sitting" , "Cyclist" , "Tram"],
-    
     "boundary": {
         "minX": 0,
         "maxX": 80,
@@ -9,6 +8,5 @@
         "minZ": -2,
         "maxZ": 1.25
     },
-
-    "anchors": [1.08,1.19, 3.42,4.41, 6.63,11.38, 9.42,5.11, 16.62,10.52]
+    "anchors": [1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52]
 }
